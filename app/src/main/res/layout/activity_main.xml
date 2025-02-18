@@ -1,19 +1,138 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+<layout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+        <import type="android.view.View" />
+        <import type="com.example.mini_fadfed.data.model.Gender" />
+        <variable
+            name="viewModel"
+            type="com.example.mini_fadfed.ui.viewmodel.RegisterUserViewModel" />
+    </data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color"
+        tools:context=".ui.activity.MainActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:title="@string/may_you_live_among_us"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/your_name_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/arabicui_text_medium"
+            android:text="@string/your_name"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <EditText
+            android:id="@+id/edtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_edittext"
+            android:fontFamily="@font/arabicui_text_medium"
+            android:hint="@string/must_be_at_least_3_characters"
+            android:padding="12dp"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/your_name_textview" />
+
+        <TextView
+            android:id="@+id/tvGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/arabicui_text_medium"
+            android:text="@string/your_gender"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/edtName" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvGender">
+
+            <ImageView
+                android:id="@+id/ivMale"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintEnd_toStartOf="@id/ivFemale"
+                android:src="@{ viewModel.state.gender == Gender.MALE ? @drawable/ic_male_selected : @drawable/ic_male_default}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/male"
+                app:layout_constraintTop_toBottomOf="@id/ivMale"
+                app:layout_constraintStart_toStartOf="@id/ivMale"
+                app:layout_constraintEnd_toEndOf="@id/ivMale"
+                android:fontFamily="@font/arabicui_text_medium"
+                android:layout_marginTop="8dp"/>
+
+            <ImageView
+                android:id="@+id/ivFemale"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:src="@{ viewModel.state.gender == Gender.FEMALE ? @drawable/ic_female_selected : @drawable/ic_female_default}"
+                app:layout_constraintStart_toEndOf="@id/ivMale"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female"
+                android:fontFamily="@font/arabicui_text_medium"
+                app:layout_constraintTop_toBottomOf="@id/ivFemale"
+                app:layout_constraintStart_toStartOf="@id/ivFemale"
+                app:layout_constraintEnd_toEndOf="@id/ivFemale"
+                android:layout_marginTop="8dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/by_continuing_you_agree_to_the_terms_and_conditions"
+            app:layout_constraintBottom_toTopOf="@id/btnContinue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnContinue"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/continue_txt"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:fontFamily="@font/arabicui_text_medium"
+            android:background="@{ viewModel.state.isNameValid ? @color/bg_continue_btn : @color/bg_continue_disable_btn }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
