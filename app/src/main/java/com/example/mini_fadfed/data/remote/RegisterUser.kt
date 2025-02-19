@@ -1,7 +1,7 @@
 package com.example.mini_fadfed.data.remote
 
 data class RegisterUserResponse(
-    val uuid: String,
+    val udid: String,
     val token: String
 )
 

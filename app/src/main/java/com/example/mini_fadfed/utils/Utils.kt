@@ -25,15 +25,6 @@ object Utils {
         val mac = Mac.getInstance(algorithm)
         mac.init(keySpec)
         val hashBytes = mac.doFinal(deviceId.toByteArray())
-
-        // Convert bytes to hex string
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
-
-//    fun generateToken(devid: String, sessionId: String): String {
-//        val md = MessageDigest.getInstance("MD5")
-//        md.update(sessionId.toByteArray())
-//        val digest = md.digest(devid.toByteArray())
-//        return digest.joinToString("") { "%02x".format(it) }
-//    }
 }
