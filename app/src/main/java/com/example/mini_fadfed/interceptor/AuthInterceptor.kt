@@ -1,12 +1,14 @@
 package com.example.mini_fadfed.interceptor
 
+import android.content.Context
 import android.util.Log
+import com.example.mini_fadfed.utils.PreferenceHelper
 import com.example.mini_fadfed.utils.Utils
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AuthInterceptor(private val devid: String, private val sessionId: String) : Interceptor {
+class AuthInterceptor(private val context: Context, private val devid: String, private val sessionId: String) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
 
         val token = Utils.generateToken(devid, sessionId) // Generate token
@@ -31,6 +33,20 @@ class AuthInterceptor(private val devid: String, private val sessionId: String) 
 
         Log.e("api_req", newRequest.toString()) // Log the request
 
-        return chain.proceed(newRequest)
+
+        val response = chain.proceed(newRequest)
+
+        if (response.isSuccessful) {
+            saveToPreferences(context, token, devid, sessionId)
+        }
+
+        return response
+    }
+
+    private fun saveToPreferences(context: Context, token: String, devid: String, sessionId: String) {
+        val pref = PreferenceHelper(context)
+        pref.putString(PreferenceHelper.TOKEN, token)
+        pref.putString(PreferenceHelper.DEVICE_ID, devid)
+        pref.putString(PreferenceHelper.SESSION_ID, sessionId)
     }
 }

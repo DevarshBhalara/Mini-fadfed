@@ -73,7 +73,8 @@ class MainActivity : AppCompatActivity() {
                     Log.e("api_res", it.toString())
 
                     it.success?.let {
-                        PreferenceHelper(this@MainActivity).putString("token", it.token)
+                        PreferenceHelper(this@MainActivity).putString(PreferenceHelper.UDID, it.udid)
+                        PreferenceHelper(this@MainActivity).putString(PreferenceHelper.AUTH_TOKEN, it.token)
                         startActivity(Intent(this@MainActivity, HomeScreenActivity::class.java))
                     }
 

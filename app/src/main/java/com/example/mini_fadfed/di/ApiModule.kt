@@ -1,10 +1,12 @@
 package com.example.mini_fadfed.di
 
+import com.example.mini_fadfed.websocket.WebSocketManager
 import android.content.Context
 import com.example.mini_fadfed.data.repository.RegisterUserRepository
 import com.example.mini_fadfed.data.service.ApiService
 import com.example.mini_fadfed.interceptor.AuthInterceptor
 import com.example.mini_fadfed.utils.AppConstants
+import com.example.mini_fadfed.utils.PreferenceHelper
 import com.example.mini_fadfed.utils.Utils
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -16,6 +18,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -43,7 +46,7 @@ class ApiModule {
         val sessionId = Utils.generateSessionId()
 
         return OkHttpClient.Builder()
-            .addInterceptor(AuthInterceptor(devid, sessionId))
+            .addInterceptor(AuthInterceptor(context, devid, sessionId))
             .build()
     }
 
@@ -56,5 +59,25 @@ class ApiModule {
     @Singleton
     fun provideRegisterUserRepository(apiService: ApiService): RegisterUserRepository {
         return RegisterUserRepository(apiService)
+    }
+
+
+    @Provides
+    @Singleton
+    @Named("web_socket_client")
+    fun provideOkHttpWebClient(): OkHttpClient {
+        return OkHttpClient.Builder().build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebSocketManager(@Named("web_socket_client") okHttpClient: OkHttpClient, preferenceHelper: PreferenceHelper): WebSocketManager {
+        return WebSocketManager(okHttpClient, preferenceHelper)
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferenceHelper(@ApplicationContext context: Context): PreferenceHelper {
+        return PreferenceHelper(context)
     }
 }
