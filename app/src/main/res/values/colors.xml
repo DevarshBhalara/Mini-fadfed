@@ -5,4 +5,6 @@
     <color name="bg_color">#FBFBFD</color>
     <color name="bg_continue_disable_btn">#ADB2C6</color>
     <color name="bg_continue_btn">#616EDA</color>
+    <color name="bg_card">#202F3E</color>
+    <color name="bg_search_screen">#1A2430</color>
 </resources>

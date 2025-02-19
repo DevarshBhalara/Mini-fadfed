@@ -1,5 +1,6 @@
 package com.example.mini_fadfed.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -44,7 +45,19 @@ class HomeScreenActivity : AppCompatActivity() {
                     message?.let { Log.e("web_soc", it) }
                 }
             }
+
+            launch {
+                viewModel.sessionReadyFlow.observe(this@HomeScreenActivity) { isReady ->
+                    if (isReady) {
+                        navigateToNextActivity()
+                    }
+                }
+            }
         }
+    }
+
+    private fun navigateToNextActivity() {
+        startActivity(Intent(this, SearchingScreenActivity::class.java))
     }
 
     private fun addListeners() {

@@ -19,6 +19,7 @@ class WebSocketManager @Inject constructor(
     private val preferenceHelper: PreferenceHelper
 ) {
 
+    var isSetFeatureOn = false
     private var webSocket: WebSocket? = null
     private val _messageFlow = MutableStateFlow<String?>(null)  // Observed by ViewModel
     val messageFlow = _messageFlow.asStateFlow()
@@ -52,7 +53,10 @@ class WebSocketManager @Inject constructor(
 
     fun sendMessage(message: String) {
         webSocket?.send(message)
+        println("Sent Message: $message")
     }
+
+
 
     fun close() {
         webSocket?.close(1000, "Closing Connection")
@@ -127,6 +131,7 @@ class WebSocketManager @Inject constructor(
         }
 
         webSocket.send(jsonArray.toString())
+        isSetFeatureOn = true
         println("Sent Message: $jsonArray")
     }
 }
