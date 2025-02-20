@@ -1,12 +1,15 @@
 package com.example.mini_fadfed.websocket
 
 import android.util.Log
+import com.example.mini_fadfed.data.remote.MatchedUser
 import com.example.mini_fadfed.utils.PreferenceHelper
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import okhttp3.*
 import okio.ByteString
 import javax.inject.Inject
@@ -21,8 +24,15 @@ class WebSocketManager @Inject constructor(
 
     var isSetFeatureOn = false
     private var webSocket: WebSocket? = null
+
     private val _messageFlow = MutableStateFlow<String?>(null)  // Observed by ViewModel
     val messageFlow = _messageFlow.asStateFlow()
+
+    private val _matchFoundData = MutableStateFlow(MatchedUser())  // Observed by ViewModel
+    val matchFoundData = _matchFoundData.asStateFlow()
+
+    private val _matchedFoundData = MutableStateFlow(MatchedUser())
+    val matchedFoundData = _matchedFoundData.asStateFlow()
 
     private var url = "wss://dev.wefaaq.net/?"
 
@@ -59,6 +69,8 @@ class WebSocketManager @Inject constructor(
 
 
     fun close() {
+        isSetFeatureOn = false
+        _messageFlow.value = ""
         webSocket?.close(1000, "Closing Connection")
     }
 
@@ -69,7 +81,7 @@ class WebSocketManager @Inject constructor(
 
         override fun onMessage(webSocket: WebSocket, text: String) {
             Log.d("WebSocket", "Received: $text")
-            _messageFlow.value = text  // Update LiveData
+            _messageFlow.value = text
 
             try {
                 // Parse incoming JSON as an array
@@ -102,9 +114,34 @@ class WebSocketManager @Inject constructor(
     fun handleIncomingMessage(webSocket: WebSocket, type: String, data: JsonObject) {
         when (type) {
             "session" -> handleSessionMessage(webSocket, data)
-//            "message" -> handleChatMessage(data)d
+            "matched" -> handleMatchedUser(data)
 //            "error" -> handleErrorMessage(data)
             else -> println("⚠️ Unknown message type: $type")
+        }
+    }
+
+    private fun handleMatchedUser(data: JsonObject) {
+        try {
+
+            println(data.toString())
+            if(!data.has("accepted")){
+                val matchedData = Gson().fromJson(data, MatchedUser::class.java)
+                _matchFoundData.value = matchedData
+                println("Matched User Searech: $matchedData")
+
+            } else {
+                val matchedFoundData = Gson().fromJson(data, MatchedUser::class.java)
+
+                _matchedFoundData.value = matchedFoundData.copy(
+                    myAcceptance = _matchedFoundData.value.myAcceptance
+                )
+                println("Matched User  accept: $matchedFoundData")
+
+            }
+
+
+        } catch (e: Exception) {
+            Log.e("matched_ex", e.printStackTrace().toString())
         }
     }
 
@@ -133,5 +170,32 @@ class WebSocketManager @Inject constructor(
         webSocket.send(jsonArray.toString())
         isSetFeatureOn = true
         println("Sent Message: $jsonArray")
+    }
+
+    fun onAcceptButton(toString: String) {
+
+        if(_matchedFoundData.value.chatId.isEmpty()) {
+            _matchedFoundData.update {
+                it.copy(
+                    chatId = _matchFoundData.value.chatId,
+                    accepted = _matchFoundData.value.accepted,
+                    myAcceptance = true,
+                    initiate = _matchFoundData.value.initiate,
+                )
+            }
+        }
+
+        _matchedFoundData.update {
+            it.copy(
+                myAcceptance = true
+            )
+        }
+        webSocket?.send(toString)
+        Log.e("my_accept", _matchedFoundData.value.toString())
+    }
+
+    fun clearMatchedUserData() {
+        _matchedFoundData.value = MatchedUser()
+        _matchFoundData.value = MatchedUser()
     }
 }
