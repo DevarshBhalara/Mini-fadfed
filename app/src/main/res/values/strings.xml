@@ -11,4 +11,8 @@
     <string name="find_a_friend">Find a friend</string>
     <string name="everyone">Everyone</string>
     <string name="choosen_with">Choosen with:</string>
+    <string name="leave">Leave</string>
+    <string name="accept">Accept</string>
+    <string name="match_found">Match found!</string>
+    <string name="user_name">User name</string>
 </resources>

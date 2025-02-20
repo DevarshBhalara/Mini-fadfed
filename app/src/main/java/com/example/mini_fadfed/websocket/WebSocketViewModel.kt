@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mini_fadfed.data.remote.MatchRequest
+import com.example.mini_fadfed.data.remote.MatchedUser
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSocketManager) : ViewModel() {
+class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSocketManager) :
+    ViewModel() {
 
     val messageFlow = webSocketManager.messageFlow.stateIn(
         viewModelScope,
@@ -25,16 +27,25 @@ class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSo
         null
     )
 
+    val matchFoundData = webSocketManager.matchFoundData.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        MatchedUser()
+    )
+
     private val _sessionReadyFlow = MutableLiveData(false)
     val sessionReadyFlow: LiveData<Boolean> = _sessionReadyFlow
 
     init {
         viewModelScope.launch {
-            messageFlow.collect { message ->
-                message?.let { if(!webSocketManager.isSetFeatureOn) handleWebSocketMessage(it) }
+            launch {
+                messageFlow.collect { message ->
+                    message?.let { if (!webSocketManager.isSetFeatureOn) handleWebSocketMessage(it) }
+                }
             }
         }
     }
+
 
     private fun handleWebSocketMessage(message: String) {
         try {
@@ -70,6 +81,7 @@ class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSo
     }
 
     fun closeConnection() {
+
         webSocketManager.close()
     }
 }

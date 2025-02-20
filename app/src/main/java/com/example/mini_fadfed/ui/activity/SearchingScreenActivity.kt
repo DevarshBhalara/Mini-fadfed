@@ -1,15 +1,18 @@
 package com.example.mini_fadfed.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.mini_fadfed.data.remote.MatchRequest
 import com.example.mini_fadfed.databinding.ActivitySearchingScreenBinding
 import com.example.mini_fadfed.websocket.WebSocketViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchingScreenActivity : AppCompatActivity() {
@@ -31,7 +34,17 @@ class SearchingScreenActivity : AppCompatActivity() {
     }
 
     private fun bindObservables() {
+        lifecycleScope.launch {
+            webSocketViewModel.matchFoundData.collect { matchedData ->
+                if(matchedData.chatId.isNotEmpty()) {
+                    navigateToMatchedUserScreen()
+                }
+            }
+        }
+    }
 
+    private fun navigateToMatchedUserScreen() {
+        startActivity(Intent(this, MatchedUserActivity::class.java))
     }
 
     private fun addListeners() {
@@ -56,5 +69,10 @@ class SearchingScreenActivity : AppCompatActivity() {
                 handler.postDelayed(this, 1000) // 1 second = 1 progress
             }
         }, 1000)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        webSocketViewModel.closeConnection()
     }
 }
