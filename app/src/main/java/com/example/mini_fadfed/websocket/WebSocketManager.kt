@@ -1,8 +1,16 @@
 package com.example.mini_fadfed.websocket
 
 import android.util.Log
+import com.example.mini_fadfed.data.model.Chat
+import com.example.mini_fadfed.data.model.MessageType
+import com.example.mini_fadfed.data.remote.AckwonledgeReceived
+import com.example.mini_fadfed.data.remote.LeaveChat
 import com.example.mini_fadfed.data.remote.MatchedUser
+import com.example.mini_fadfed.data.remote.ReceivedMessage
+import com.example.mini_fadfed.data.remote.SendAckwonledge
+import com.example.mini_fadfed.data.remote.SendMessage
 import com.example.mini_fadfed.utils.PreferenceHelper
+import com.example.mini_fadfed.utils.Utils
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -22,6 +30,8 @@ class WebSocketManager @Inject constructor(
     private val preferenceHelper: PreferenceHelper
 ) {
 
+    var isSessionReady = false
+
     var isSetFeatureOn = false
     private var webSocket: WebSocket? = null
 
@@ -33,6 +43,18 @@ class WebSocketManager @Inject constructor(
 
     private val _matchedFoundData = MutableStateFlow(MatchedUser())
     val matchedFoundData = _matchedFoundData.asStateFlow()
+
+    private val _leaveChatFlow = MutableStateFlow(false)  // Flow to observe leave event
+    val leaveChatFlow = _leaveChatFlow.asStateFlow()
+
+    private val _lastSendChat = MutableStateFlow(Chat())
+    val lastSendChat = _lastSendChat.asStateFlow()
+
+    private val _lastReceivedChat = MutableStateFlow(Chat())
+    val lastReceivedChat = _lastReceivedChat.asStateFlow()
+
+    private val _acknowledgedData = MutableStateFlow<AckwonledgeReceived?>(null)
+    val acknowledgedData = _acknowledgedData.asStateFlow()
 
     private var url = "wss://dev.wefaaq.net/?"
 
@@ -89,9 +111,12 @@ class WebSocketManager @Inject constructor(
                 val type = jsonArray[0].asString // First element: message type
                 val data = jsonArray[1].asJsonObject // Second element: JSON object
 
+                Log.e("chat_adapter", data.toString())
+
                 handleIncomingMessage(webSocket, type, data)
 
             } catch (e: Exception) {
+                Log.e("chat_adapter", e.message ?: "")
                 println("Error parsing WebSocket message: ${e.message}")
             }
 
@@ -114,10 +139,23 @@ class WebSocketManager @Inject constructor(
     fun handleIncomingMessage(webSocket: WebSocket, type: String, data: JsonObject) {
         when (type) {
             "session" -> handleSessionMessage(webSocket, data)
-            "matched" -> handleMatchedUser(data)
-//            "error" -> handleErrorMessage(data)
-            else -> println("⚠️ Unknown message type: $type")
+            "matched" -> if(isSessionReady) handleMatchedUser(data)
+            "message" -> if (isSessionReady) handleIncomingChatMessage(data)
+            "ack" -> if(isSessionReady) {
+                Log.e("chat_adapter", "if")
+                handleAcknowledge(data) } else {
+                Log.e("chat_adapter", "else ")
+            }
+            "leave" -> handleLeaveChat(data)
+            else -> println("Unknown message type: $type")
         }
+    }
+
+    private fun handleLeaveChat(data: JsonObject) {
+        val chatId = data.get("chatId").asString
+        Log.e("leave_chat", chatId)
+        _leaveChatFlow.value = true
+        _leaveChatFlow.value = false
     }
 
     private fun handleMatchedUser(data: JsonObject) {
@@ -153,6 +191,7 @@ class WebSocketManager @Inject constructor(
         println("Session Updated: $sessionId | State: $state | Device ID: $udid")
 
         if (state == "ready") {
+            isSessionReady = true
             sendFeatureOn(webSocket, sessionId)
         }
     }
@@ -197,5 +236,92 @@ class WebSocketManager @Inject constructor(
     fun clearMatchedUserData() {
         _matchedFoundData.value = MatchedUser()
         _matchFoundData.value = MatchedUser()
+    }
+
+    fun sentChat(chat: Chat) {
+
+        val message = Gson().toJsonTree(SendMessage(
+            content = chat.content,
+            to = chat.receiverName,
+            id = chat.senderId,
+            ts = chat.timestamp
+        )).asJsonObject
+
+        val list = listOf(
+            "send",
+            message
+        )
+        val json = Gson().toJsonTree(list).asJsonArray
+        webSocket?.send(json.toString())
+        Log.e("web_soc_chat_send", message.toString())
+        _lastSendChat.value = chat.copy(isSend = true)
+
+    }
+
+
+    private fun handleIncomingChatMessage(data: JsonObject) {
+        try {
+            val receivedChat = Gson().fromJson(data, ReceivedMessage::class.java)
+            _lastReceivedChat.value = Chat(
+                receiverName = receivedChat.by,
+                content = receivedChat.content,
+                chatId = receivedChat.chatId,
+                senderId = receivedChat.id.split(":")[1],
+                messageType = MessageType.RECEIVE
+            )
+        } catch (e: Exception) {
+            Log.e("WebSocket", "Error parsing chat message: ${e.message}")
+        }
+    }
+
+
+    fun sendAckMessageSeen(id: String) {
+        val sendAck = Gson().toJsonTree(SendAckwonledge(
+            status = "seen",
+            id = Utils.generateTimeStamp().toLong(),
+            ref = id
+        )).asJsonObject
+        val list = listOf(
+            "ack",
+            sendAck
+        )
+        val json = Gson().toJsonTree(list).asJsonArray
+        webSocket?.send(json.toString())
+    }
+
+    private fun sendAckMessageReceived(id: String) {
+        val sendAck = Gson().toJsonTree(SendAckwonledge(
+            status = "received",
+            id = Utils.generateTimeStamp().toLong(),
+            ref = id
+        )).asJsonObject
+        val list = listOf(
+            "ack",
+            sendAck
+        )
+        val json = Gson().toJsonTree(list).asJsonArray
+        webSocket?.send(json.toString())
+    }
+
+    private fun handleAcknowledge(data: JsonObject) {
+        if(data.has("status")) {
+            Log.e("chat_adapter", "web soc ${data.toString()}")
+            val ack = Gson().fromJson(data, AckwonledgeReceived::class.java)
+            _acknowledgedData.value = ack
+        }
+
+    }
+
+    fun leaveChat(chatId: String) {
+        _lastSendChat.value = Chat()
+        _lastReceivedChat.value = Chat()
+        val chat = Gson().toJsonTree(LeaveChat(chatId = chatId)).asJsonObject
+        val list = listOf(
+            "leave",
+            chat
+        )
+        val json = Gson().toJsonTree(list).asJsonArray
+        webSocket?.send(json.toString())
+        Log.e("leave", json.toString())
     }
 }

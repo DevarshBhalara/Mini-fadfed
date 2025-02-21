@@ -1,5 +1,6 @@
 package com.example.mini_fadfed.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -38,17 +39,28 @@ class MatchedUserActivity : AppCompatActivity() {
                    }
                }
            }
+
+           launch {
+               viewModel.leaveChat.collectLatest {
+                   if(it) {
+                       finish()
+                   }
+               }
+           }
        }
     }
 
     private fun handleMatchFoundUser(matchedUser: MatchedUser) {
         if(matchedUser.accepted && matchedUser.myAcceptance) {
-            navigateToConversationScreen()
+            navigateToConversationScreen(matchedUser.chatId, matchedUser.udid)
         }
     }
 
-    private fun navigateToConversationScreen() {
-        Log.e("conv_start", "Both user accept")
+    private fun navigateToConversationScreen(chatId: String, recName: String) {
+        startActivity(Intent(this, ConversationActivity::class.java).apply {
+            putExtra("chatId", chatId)
+            putExtra("recName", recName)
+        })
     }
 
     private fun addListeners() {

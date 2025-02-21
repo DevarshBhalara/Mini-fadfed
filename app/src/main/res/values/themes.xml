@@ -18,4 +18,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="TextMessageSend">
+        <item name="fontFamily">@font/arabicui_text_medium</item>
+        <item name="android:textColor">@color/txt_message_send</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>
