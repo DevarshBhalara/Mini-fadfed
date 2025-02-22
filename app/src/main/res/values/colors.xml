@@ -7,4 +7,7 @@
     <color name="bg_continue_btn">#616EDA</color>
     <color name="bg_card">#202F3E</color>
     <color name="bg_search_screen">#1A2430</color>
+    <color name="txt_message_send">#616EDA</color>
+    <color name="txt_secondary">#969CB5</color>
+    <color name="icon_tint">#D3D3D3</color>
 </resources>

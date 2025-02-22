@@ -3,7 +3,7 @@ package com.example.mini_fadfed.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +22,6 @@ class HomeScreenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityHomeScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -62,12 +61,40 @@ class HomeScreenActivity : AppCompatActivity() {
 
     private fun addListeners() {
         binding.ivSearch.setOnClickListener {
-            viewModel.connect()
+            if (viewModel.getIsClosed()) {
+                viewModel.connect()
+            } else {
+                navigateToNextActivity()
+            }
+        }
+
+        binding.ivFemale.setOnClickListener {
+            binding.ivFemale.alpha = 1f
+            binding.ivMale.alpha = 0.3f
+            binding.ivBoth.alpha = 0.3f
+        }
+
+        binding.ivMale.setOnClickListener {
+            binding.ivFemale.alpha = 0.3f
+            binding.ivMale.alpha = 1f
+            binding.ivBoth.alpha = 0.3f
+        }
+
+        binding.ivBoth.setOnClickListener {
+            binding.ivFemale.alpha = 0.3f
+            binding.ivMale.alpha = 0.3f
+            binding.ivBoth.alpha = 1f
         }
     }
 
-    private fun init() {
 
+    private fun init() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewModel.closeConnection()
+                finishAffinity()
+            }
+        })
     }
 
     override fun onDestroy() {

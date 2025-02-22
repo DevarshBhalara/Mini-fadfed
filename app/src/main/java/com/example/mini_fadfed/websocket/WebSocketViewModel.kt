@@ -10,9 +10,7 @@ import com.example.mini_fadfed.data.remote.MatchedUser
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -46,6 +44,7 @@ class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSo
         }
     }
 
+    fun getIsClosed(): Boolean = webSocketManager.isClosed
 
     private fun handleWebSocketMessage(message: String) {
         try {
@@ -76,12 +75,7 @@ class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSo
         webSocketManager.sendMessage(json.toString())
     }
 
-    fun sendMessage(message: String) {
-        webSocketManager.sendMessage(message)
-    }
-
     fun closeConnection() {
-
         webSocketManager.close()
     }
 }

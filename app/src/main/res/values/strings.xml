@@ -15,4 +15,9 @@
     <string name="accept">Accept</string>
     <string name="match_found">Match found!</string>
     <string name="user_name">User name</string>
+    <string name="transgression">Transgression</string>
+    <string name="report">Report</string>
+    <string name="addition">Addition</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="send_message">Send Message</string>
 </resources>

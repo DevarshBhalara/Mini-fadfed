@@ -1,8 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Minifadfed" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="android:forceDarkAllowed" tools:ignore="NewApi">false</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.Minifadfed" parent="Base.Theme.Minifadfed" />
@@ -15,6 +17,12 @@
     <style name="TextMedium">
         <item name="fontFamily">@font/arabicui_text_medium</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextMessageSend">
+        <item name="fontFamily">@font/arabicui_text_medium</item>
+        <item name="android:textColor">@color/txt_message_send</item>
         <item name="android:textSize">14sp</item>
     </style>
 

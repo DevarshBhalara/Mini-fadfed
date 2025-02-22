@@ -1,7 +1,7 @@
 package com.example.mini_fadfed.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,25 +30,45 @@ class MatchedUserActivity : AppCompatActivity() {
     }
 
     private fun bindObservables() {
-       lifecycleScope.launch {
-           launch {
-               viewModel.matchFoundData.collectLatest {
-                   if(it.chatId.isNotEmpty()) {
-                       handleMatchFoundUser(it)
-                   }
-               }
-           }
-       }
-    }
+        lifecycleScope.launch {
+            launch {
+                viewModel.matchFoundData.collectLatest {
+                    if (it.chatId.isNotEmpty()) {
+                        handleMatchFoundUser(it)
+                    }
+                }
+            }
 
-    private fun handleMatchFoundUser(matchedUser: MatchedUser) {
-        if(matchedUser.accepted && matchedUser.myAcceptance) {
-            navigateToConversationScreen()
+            launch {
+                viewModel.leaveChat.collectLatest {
+                    if (it) {
+                        moveBack()
+                    }
+                }
+            }
         }
     }
 
-    private fun navigateToConversationScreen() {
-        Log.e("conv_start", "Both user accept")
+    private fun moveBack() {
+
+        val intent = Intent(this, SearchingScreenActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(intent)
+
+    }
+
+    private fun handleMatchFoundUser(matchedUser: MatchedUser) {
+        if (matchedUser.accepted && matchedUser.myAcceptance) {
+            navigateToConversationScreen(matchedUser.chatId, matchedUser.udid)
+        }
+    }
+
+    private fun navigateToConversationScreen(chatId: String, recName: String) {
+        startActivity(Intent(this, ConversationActivity::class.java).apply {
+            putExtra("chatId", chatId)
+            putExtra("recName", recName)
+        })
     }
 
     private fun addListeners() {
@@ -57,10 +77,16 @@ class MatchedUserActivity : AppCompatActivity() {
             viewModel.onAcceptButton()
         }
 
+        binding.btnLeave.setOnClickListener {
+            viewModel.onLeaveButton()
+            moveBack()
+        }
+
     }
 
     private fun init() {
-
+        val recName = intent.getStringExtra("name") ?: ""
+        binding.tvUserName.text = recName
     }
 
     override fun onDestroy() {

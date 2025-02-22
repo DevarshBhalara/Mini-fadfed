@@ -23,6 +23,12 @@ class WebSocketMatchedUserViewModel  @Inject constructor(
         MatchedUser()
     )
 
+    val leaveChat = webSocketManager.leaveChatFlow.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        false
+    )
+
     init {
         viewModelScope.launch {
             matchFoundData.collect { message ->
@@ -50,6 +56,10 @@ class WebSocketMatchedUserViewModel  @Inject constructor(
 
     fun clearData() {
         webSocketManager.clearMatchedUserData()
+    }
+
+    fun onLeaveButton() {
+        webSocketManager.leaveChat(matchFoundData.value.chatId)
     }
 
 }
