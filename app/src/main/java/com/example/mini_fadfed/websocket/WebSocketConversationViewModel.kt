@@ -4,11 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mini_fadfed.data.model.Chat
-import com.example.mini_fadfed.data.remote.MatchedUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,33 +39,21 @@ class WebSocketConversationViewModel @Inject constructor(
         false
     )
 
-    init {
-        viewModelScope.launch {
-            launch {
-                lastSentChat.collect { message ->
-                    message.let { if(it.chatId.isNotEmpty()) handleLastSendChat(it) }
-                }
-
-            }
-        }
-    }
-
     fun sendChat(chat: Chat) {
         webSocketManager.sentChat(chat)
     }
 
-    private fun handleLastSendChat(chat: Chat) {
-
-
-
-    }
-
     fun leaveChat(chatId: String) {
+        Log.e("leave_chat_vm", chatId)
         webSocketManager.leaveChat(chatId)
     }
 
     fun messageRead(id: String) {
         webSocketManager.sendAckMessageSeen(id)
+    }
+
+    fun setLastUserName(name: String) {
+        webSocketManager.lastLeaveUserId = name
     }
 
 

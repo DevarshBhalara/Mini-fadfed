@@ -1,14 +1,12 @@
 package com.example.mini_fadfed.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.mini_fadfed.R
 import com.example.mini_fadfed.data.model.Chat
 import com.example.mini_fadfed.data.model.MessageType
 import com.example.mini_fadfed.databinding.ActivityConversationBinding
@@ -16,7 +14,6 @@ import com.example.mini_fadfed.ui.adapter.ChatAdapter
 import com.example.mini_fadfed.websocket.WebSocketConversationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -81,7 +78,10 @@ class ConversationActivity : AppCompatActivity() {
             launch {
                 viewModel.leaveChat.collectLatest {
                     if(it) {
-                        finish()
+                        val intent = Intent(this@ConversationActivity, SearchingScreenActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        }
+                        startActivity(intent)
                     }
                 }
             }
@@ -91,27 +91,49 @@ class ConversationActivity : AppCompatActivity() {
 
     private fun addListeners() {
         binding.btnSend.setOnClickListener {
-            val chat = Chat(
-                chatId = chatId,
-                content = binding.edtMessage.text.toString(),
-                messageType = MessageType.SEND,
-                receiverName = recName
-            )
-            viewModel.sendChat(chat)
-            adapter.addChat(chat)
-            binding.rvChat.scrollToPosition(adapter.itemCount - 1)
+
+            if (binding.edtMessage.text.toString().trim().isNotEmpty()) {
+                val chat = Chat(
+                    chatId = chatId,
+                    content = binding.edtMessage.text.toString(),
+                    messageType = MessageType.SEND,
+                    receiverName = recName
+                )
+                viewModel.sendChat(chat)
+                adapter.addChat(chat)
+                binding.rvChat.scrollToPosition(adapter.itemCount - 1)
+                binding.edtMessage.setText("")
+            }
+        }
+
+        binding.ivBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
     private fun init() {
         chatId = intent.getStringExtra("chatId") ?: ""
         recName = intent.getStringExtra("recName") ?: ""
+        binding.ivUserName.text = recName
         binding.rvChat.adapter = adapter
+
+        viewModel.setLastUserName(recName)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.e("leave_chat", "conv_bacl")
+                viewModel.leaveChat(chatId)
+                val intent = Intent(this@ConversationActivity, SearchingScreenActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                startActivity(intent)
+            }
+        })
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.leaveChat(chatId)
         Log.e("onDes", "covEnd")
     }
 

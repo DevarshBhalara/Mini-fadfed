@@ -7,6 +7,12 @@ import kotlinx.parcelize.Parcelize
 data class MatchRequest(
     val algo: String,
     val segment: String
-//    val gender: String,
+//    val gender: GenderReq,
 //    val country: List<String>
 ): Parcelable
+
+enum class GenderReq {
+    MALE,
+    FEMALE,
+    BOTH
+}

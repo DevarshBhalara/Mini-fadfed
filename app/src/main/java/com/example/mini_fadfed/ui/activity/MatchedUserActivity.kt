@@ -31,27 +31,36 @@ class MatchedUserActivity : AppCompatActivity() {
     }
 
     private fun bindObservables() {
-       lifecycleScope.launch {
-           launch {
-               viewModel.matchFoundData.collectLatest {
-                   if(it.chatId.isNotEmpty()) {
-                       handleMatchFoundUser(it)
-                   }
-               }
-           }
+        lifecycleScope.launch {
+            launch {
+                viewModel.matchFoundData.collectLatest {
+                    if (it.chatId.isNotEmpty()) {
+                        handleMatchFoundUser(it)
+                    }
+                }
+            }
 
-           launch {
-               viewModel.leaveChat.collectLatest {
-                   if(it) {
-                       finish()
-                   }
-               }
-           }
-       }
+            launch {
+                viewModel.leaveChat.collectLatest {
+                    if (it) {
+                        moveBack()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun moveBack() {
+
+        val intent = Intent(this, SearchingScreenActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(intent)
+
     }
 
     private fun handleMatchFoundUser(matchedUser: MatchedUser) {
-        if(matchedUser.accepted && matchedUser.myAcceptance) {
+        if (matchedUser.accepted && matchedUser.myAcceptance) {
             navigateToConversationScreen(matchedUser.chatId, matchedUser.udid)
         }
     }
@@ -69,10 +78,16 @@ class MatchedUserActivity : AppCompatActivity() {
             viewModel.onAcceptButton()
         }
 
+        binding.btnLeave.setOnClickListener {
+            viewModel.onLeaveButton()
+            moveBack()
+        }
+
     }
 
     private fun init() {
-
+        val recName = intent.getStringExtra("name") ?: ""
+        binding.tvUserName.text = recName
     }
 
     override fun onDestroy() {

@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -37,14 +39,27 @@ class SearchingScreenActivity : AppCompatActivity() {
         lifecycleScope.launch {
             webSocketViewModel.matchFoundData.collect { matchedData ->
                 if(matchedData.chatId.isNotEmpty()) {
-                    navigateToMatchedUserScreen()
+                    navigateToMatchedUserScreen(matchedData.udid)
                 }
             }
         }
     }
 
-    private fun navigateToMatchedUserScreen() {
-        startActivity(Intent(this, MatchedUserActivity::class.java))
+    private val leaveChatLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val isChatLeft = result.data?.getBooleanExtra("chat_left", false) ?: false
+            if (isChatLeft) {
+                Log.e("chat_left", "true")
+                init()
+            }
+        }
+    }
+
+
+    private fun navigateToMatchedUserScreen(name: String) {
+        leaveChatLauncher.launch(Intent(this, MatchedUserActivity::class.java).apply {
+            putExtra("name", name)
+        })
     }
 
     private fun addListeners() {
@@ -52,6 +67,7 @@ class SearchingScreenActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        progress = 0
         startProgress()
         webSocketViewModel.searchUserForChat(MatchRequest("R", "modern"))
     }
@@ -71,8 +87,4 @@ class SearchingScreenActivity : AppCompatActivity() {
         }, 1000)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        webSocketViewModel.closeConnection()
-    }
 }

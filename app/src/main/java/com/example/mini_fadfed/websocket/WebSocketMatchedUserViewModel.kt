@@ -58,4 +58,8 @@ class WebSocketMatchedUserViewModel  @Inject constructor(
         webSocketManager.clearMatchedUserData()
     }
 
+    fun onLeaveButton() {
+        webSocketManager.leaveChat(matchFoundData.value.chatId)
+    }
+
 }

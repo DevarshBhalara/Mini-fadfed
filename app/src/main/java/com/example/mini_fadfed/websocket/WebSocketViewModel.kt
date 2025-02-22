@@ -46,6 +46,7 @@ class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSo
         }
     }
 
+    fun getIsClosed(): Boolean = webSocketManager.isClosed
 
     private fun handleWebSocketMessage(message: String) {
         try {
@@ -76,12 +77,7 @@ class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSo
         webSocketManager.sendMessage(json.toString())
     }
 
-    fun sendMessage(message: String) {
-        webSocketManager.sendMessage(message)
-    }
-
     fun closeConnection() {
-
         webSocketManager.close()
     }
 }

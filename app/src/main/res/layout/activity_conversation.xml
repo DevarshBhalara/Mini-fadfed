@@ -6,47 +6,152 @@
     android:background="@color/bg_color"
     android:layout_height="match_parent">
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="18dp"
+        android:paddingBottom="8dp"
+        android:background="@color/white"
+        android:elevation="5dp"
+        android:paddingHorizontal="10dp"
+        >
+
+        <ImageView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/ivBack"
+            android:layout_marginStart="4dp"
+            app:tint="@color/icon_tint" />
+
+        <ImageView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_user_profile"
+            android:id="@+id/ivUserProfile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/ivUserName"
+            style="@style/TextMedium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Username"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivAdd"
+            app:layout_constraintStart_toEndOf="@id/ivUserProfile"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/ivReset"
+            android:text="@string/transgression"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_reset"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/TextMedium"
+            android:maxLength="10"
+            android:textColor="@color/txt_secondary"
+            />
+
+        <TextView
+            android:id="@+id/ivReport"
+            android:text="@string/report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:drawableTopCompat="@drawable/ic_report"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivReset"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/TextMedium"
+            android:maxLength="10"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/txt_secondary"
+            />
+
+        <TextView
+            android:id="@+id/ivAdd"
+            android:text="@string/addition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:drawableTopCompat="@drawable/ic_add"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivReport"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/TextMedium"
+            android:layout_marginEnd="10dp"
+            android:maxLength="10"
+            android:textColor="@color/txt_secondary"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvChat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:orientation="vertical"
         android:layout_margin="12dp"
         app:layout_constraintBottom_toTopOf="@id/messageInputLayout" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/messageInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bg_editbox_chat"
         android:gravity="center"
-        android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- EditText for typing messages -->
         <EditText
             android:id="@+id/edtMessage"
             android:layout_width="0dp"
+            app:layout_constraintEnd_toStartOf="@id/btnSend"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Type a message"
+            android:hint="@string/type_a_message"
             android:maxLines="3"
-            android:background="@android:drawable/editbox_background"
+            android:layout_marginStart="8dp"
+            android:background="@null"
             android:padding="10dp"/>
 
-        <!-- Send button -->
         <ImageButton
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/btnSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send"
+            android:src="@drawable/ic_send"
+            android:rotation="180"
             android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="Send Message"
+            android:contentDescription="@string/send_message"
             android:padding="10dp"/>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

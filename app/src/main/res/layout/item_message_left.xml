@@ -55,6 +55,9 @@
                     tools:text="User text dsifugs" />
 
                 <TextView
+                    android:fontFamily="@font/arabic_ui_text_regular"
+                    android:textColor="#CC5D5D5D"
+                    android:textSize="11sp"
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

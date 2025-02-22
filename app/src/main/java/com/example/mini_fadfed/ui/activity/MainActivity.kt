@@ -76,6 +76,7 @@ class MainActivity : AppCompatActivity() {
                         PreferenceHelper(this@MainActivity).putString(PreferenceHelper.UDID, it.udid)
                         PreferenceHelper(this@MainActivity).putString(PreferenceHelper.AUTH_TOKEN, it.token)
                         startActivity(Intent(this@MainActivity, HomeScreenActivity::class.java))
+                        finish()
                     }
 
                 }
@@ -87,6 +88,7 @@ class MainActivity : AppCompatActivity() {
 
         if(PreferenceHelper(this).getString("token", "").isNotEmpty()) {
             startActivity(Intent(this@MainActivity, HomeScreenActivity::class.java))
+            finish()
         }
 
         binding.lifecycleOwner = this
