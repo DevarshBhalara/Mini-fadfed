@@ -207,11 +207,11 @@ class WebSocketManager @Inject constructor(
 
         if (state == "ready") {
             isSessionReady = true
-            sendFeatureOn(webSocket, sessionId)
+            sendFeatureOn(webSocket)
         }
     }
 
-    private fun sendFeatureOn(webSocket: WebSocket, sessionId: String?) {
+    private fun sendFeatureOn(webSocket: WebSocket) {
         val jsonArray = JsonArray().apply {
             add("set")
             add(JsonObject().apply {

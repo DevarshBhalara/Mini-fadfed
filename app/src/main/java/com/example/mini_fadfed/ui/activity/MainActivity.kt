@@ -5,14 +5,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
-import com.example.mini_fadfed.R
 import com.example.mini_fadfed.data.model.Gender
 import com.example.mini_fadfed.databinding.ActivityMainBinding
 import com.example.mini_fadfed.ui.viewmodel.RegisterUserViewModel
