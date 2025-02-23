@@ -9,6 +9,13 @@ plugins {
 }
 
 android {
+
+    bundle {
+        language {
+            enableSplit = true
+        }
+    }
+
     namespace = "com.example.mini_fadfed"
     compileSdk = 35
 
@@ -42,6 +49,7 @@ android {
         viewBinding = true
         dataBinding = true
     }
+
 }
 
 dependencies {

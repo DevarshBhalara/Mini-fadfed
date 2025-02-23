@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            app:titleTextColor="@color/title_txt"
             app:title="@string/may_you_live_among_us"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -114,6 +115,7 @@
             android:gravity="center"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="16dp"
+
             android:text="@string/by_continuing_you_agree_to_the_terms_and_conditions"
             app:layout_constraintBottom_toTopOf="@id/btnContinue"
             app:layout_constraintStart_toStartOf="parent"
@@ -127,6 +129,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:fontFamily="@font/arabicui_text_medium"
+            android:enabled="@{ viewModel.state.isNameValid ? true : false }"
             android:background="@{ viewModel.state.isNameValid ? @color/bg_continue_btn : @color/bg_continue_disable_btn }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

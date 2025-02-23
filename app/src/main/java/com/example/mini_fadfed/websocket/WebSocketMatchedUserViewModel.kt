@@ -1,6 +1,5 @@
 package com.example.mini_fadfed.websocket
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mini_fadfed.data.remote.AcceptMessage
@@ -9,7 +8,6 @@ import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,18 +26,6 @@ class WebSocketMatchedUserViewModel  @Inject constructor(
         SharingStarted.Lazily,
         false
     )
-
-    init {
-        viewModelScope.launch {
-            matchFoundData.collect { message ->
-                message.let { if(it.chatId.isNotEmpty()) handleWebSocketMessage(it) }
-            }
-        }
-    }
-
-    private fun handleWebSocketMessage(data: MatchedUser) {
-        Log.e("web_socket", data.toString())
-    }
 
     fun onAcceptButton() {
         val message = "accept"
@@ -60,6 +46,10 @@ class WebSocketMatchedUserViewModel  @Inject constructor(
 
     fun onLeaveButton() {
         webSocketManager.leaveChat(matchFoundData.value.chatId)
+    }
+
+    fun setLastUserName(recName: String) {
+        webSocketManager.lastLeaveUserId = recName
     }
 
 }

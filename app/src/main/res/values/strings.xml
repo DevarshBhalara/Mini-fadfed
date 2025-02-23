@@ -5,7 +5,7 @@
     <string name="your_gender">Your Gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="by_continuing_you_agree_to_the_terms_and_conditions">By continuing, you agree to the terms and conditions</string>
+    <string name="by_continuing_you_agree_to_the_terms_and_conditions"><u>By continuing, you agree to the terms and conditions</u></string>
     <string name="continue_txt">Continue</string>
     <string name="may_you_live_among_us">May you live among us</string>
     <string name="find_a_friend">Find a friend</string>

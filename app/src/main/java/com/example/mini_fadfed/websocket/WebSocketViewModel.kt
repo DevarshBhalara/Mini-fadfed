@@ -25,7 +25,7 @@ class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSo
         null
     )
 
-    val matchFoundData = webSocketManager.matchFoundData.stateIn(
+    val matchFoundData = webSocketManager.searchMatchFoundData.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         MatchedUser()
@@ -73,6 +73,7 @@ class WebSocketViewModel @Inject constructor(private val webSocketManager: WebSo
         val gson = Gson()
         val json = gson.toJsonTree(list).asJsonArray
         webSocketManager.sendMessage(json.toString())
+        Log.e("web_socket_search", json.toString())
     }
 
     fun closeConnection() {
