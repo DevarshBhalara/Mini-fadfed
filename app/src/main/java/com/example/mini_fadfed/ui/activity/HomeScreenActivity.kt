@@ -1,6 +1,8 @@
 package com.example.mini_fadfed.ui.activity
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.OnBackPressedCallback
@@ -8,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.mini_fadfed.databinding.ActivityHomeScreenBinding
+import com.example.mini_fadfed.utils.LocaleHelper
 import com.example.mini_fadfed.utils.PreferenceHelper
 import com.example.mini_fadfed.websocket.WebSocketViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +22,13 @@ class HomeScreenActivity : AppCompatActivity() {
 
     private val viewModel: WebSocketViewModel by viewModels()
     private lateinit var binding: ActivityHomeScreenBinding
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase)
+        val defaultLanguage = LocaleHelper.getDeviceDefaultLanguage()
+        val appLanguage = if (defaultLanguage == "ar") "ar" else "en"
+        LocaleHelper.setAppLocale(this, appLanguage)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

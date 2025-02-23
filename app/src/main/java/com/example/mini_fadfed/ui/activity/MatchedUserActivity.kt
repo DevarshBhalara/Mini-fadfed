@@ -2,6 +2,7 @@ package com.example.mini_fadfed.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,7 @@ class MatchedUserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMatchedUserScreenBinding
     private val viewModel: WebSocketMatchedUserViewModel by viewModels()
+    private var recName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,7 @@ class MatchedUserActivity : AppCompatActivity() {
             launch {
                 viewModel.matchFoundData.collectLatest {
                     if (it.chatId.isNotEmpty()) {
+                        Log.e("matched_user", it.toString())
                         handleMatchFoundUser(it)
                     }
                 }
@@ -59,6 +62,7 @@ class MatchedUserActivity : AppCompatActivity() {
     }
 
     private fun handleMatchFoundUser(matchedUser: MatchedUser) {
+        recName = matchedUser.udid
         if (matchedUser.accepted && matchedUser.myAcceptance) {
             navigateToConversationScreen(matchedUser.chatId, matchedUser.udid)
         }
@@ -78,6 +82,7 @@ class MatchedUserActivity : AppCompatActivity() {
         }
 
         binding.btnLeave.setOnClickListener {
+            viewModel.setLastUserName(recName)
             viewModel.onLeaveButton()
             moveBack()
         }
@@ -85,7 +90,7 @@ class MatchedUserActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        val recName = intent.getStringExtra("name") ?: ""
+        recName = intent.getStringExtra("name") ?: ""
         binding.tvUserName.text = recName
     }
 

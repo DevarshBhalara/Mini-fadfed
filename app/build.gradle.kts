@@ -9,6 +9,13 @@ plugins {
 }
 
 android {
+
+    bundle {
+        language {
+            enableSplit = true
+        }
+    }
+
     namespace = "com.example.mini_fadfed"
     compileSdk = 35
 
@@ -42,6 +49,7 @@ android {
         viewBinding = true
         dataBinding = true
     }
+
 }
 
 dependencies {
@@ -54,41 +62,24 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    val navVersion = "2.7.2"
-    val hiltVersion = "2.46.1"
-    val okHttpVersion = "4.11.0"
-    val retrofitVersion = "2.9.0"
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     // Gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.gson)
 
     // OkHttp3 and Retrofit
-    implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okHttpVersion")
-    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
     // Glide
-    implementation("com.github.bumptech.glide:glide:4.14.2")
-
-    //Shimmer
-    implementation("com.facebook.shimmer:shimmer:0.5.0@aar")
-
-//    // RoomDB
-//    def room_version = "2.5.2"
-//
-//    implementation "androidx.room:room-ktx:$room_version"
-//    implementation "androidx.room:room-runtime:$room_version"
-//    annotationProcessor "androidx.room:room-compiler:$room_version"
-//
-//    // To use Kotlin annotation processing tool (kapt)
-//    kapt "androidx.room:room-compiler:$room_version"
+    implementation(libs.glide)
 }

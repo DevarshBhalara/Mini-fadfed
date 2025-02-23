@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mini-fadfed</string>
+    <string name="app_name">ميني-فادفيد</string>
+    <string name="your_name">اسمك</string>
+    <string name="must_be_at_least_3_characters">يجب أن لا يقل عن ٣ أحرف</string>
+    <string name="your_gender">جنسك</string>
+    <string name="male">ذكر</string>
+    <string name="female">أنثى</string>
+    <string name="by_continuing_you_agree_to_the_terms_and_conditions"><u>استمرارك يعني موافقتك على الشروط والأحكام</u></string>
+    <string name="continue_txt">استمر</string>
+    <string name="may_you_live_among_us">حياك بيننا</string>
+    <string name="find_a_friend">ابحث عن صديق</string>
+    <string name="everyone">الكل</string>
+    <string name="choosen_with">فضفض مع:</string>
+    <string name="leave">مغادرة</string>
+    <string name="accept">قبول</string>
+    <string name="match_found">تم العثور على تطابق!</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="transgression">تجاوز</string>
+    <string name="report">إبلاغ</string>
+    <string name="addition">إضافة</string>
+    <string name="type_a_message">اكتب رسالة</string>
+    <string name="send_message">إرسال الرسالة</string>
 </resources>

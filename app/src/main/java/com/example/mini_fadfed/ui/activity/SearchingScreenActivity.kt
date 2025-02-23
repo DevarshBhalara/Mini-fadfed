@@ -37,9 +37,13 @@ class SearchingScreenActivity : AppCompatActivity() {
 
     private fun bindObservables() {
         lifecycleScope.launch {
-            webSocketViewModel.matchFoundData.collect { matchedData ->
-                if(matchedData.chatId.isNotEmpty()) {
-                    navigateToMatchedUserScreen(matchedData.udid)
+            launch {
+                webSocketViewModel.matchFoundData.collect { matchedData ->
+                    Log.e("matched_user", matchedData.toString())
+
+                    if(matchedData.chatId.isNotEmpty()) {
+                        navigateToMatchedUserScreen(matchedData.udid)
+                    }
                 }
             }
         }
