@@ -62,7 +62,7 @@
             android:text="@string/transgression"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_reset"
+            app:drawableTopCompat="@drawable/ic_reset"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -140,6 +140,7 @@
             android:padding="10dp"/>
 
         <EditText
+            android:inputType="text"
             app:layout_constraintStart_toEndOf="@id/btnSend"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -1,15 +1,17 @@
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <import type="android.view.View" />
+
         <import type="com.example.mini_fadfed.data.model.Gender" />
+
         <variable
             name="viewModel"
             type="com.example.mini_fadfed.ui.viewmodel.RegisterUserViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main"
@@ -25,7 +27,7 @@
             android:background="@color/white"
             app:titleTextColor="@color/title_txt"
             app:title="@string/may_you_live_among_us"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/your_name_textview"
@@ -39,6 +41,7 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <EditText
+            android:inputType="text"
             android:id="@+id/edtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

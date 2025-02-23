@@ -82,7 +82,7 @@ class MatchedUserActivity : AppCompatActivity() {
         }
 
         binding.btnLeave.setOnClickListener {
-//            viewModel.setLastUserName(recName)
+            viewModel.setLastUserName(recName)
             viewModel.onLeaveButton()
             moveBack()
         }
@@ -90,7 +90,7 @@ class MatchedUserActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        val recName = intent.getStringExtra("name") ?: ""
+        recName = intent.getStringExtra("name") ?: ""
         binding.tvUserName.text = recName
     }
 

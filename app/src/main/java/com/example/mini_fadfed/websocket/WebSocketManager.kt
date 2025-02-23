@@ -35,7 +35,7 @@ class WebSocketManager @Inject constructor(
     private var isSessionReady = false
     var isSetFeatureOn = false
 
-    var lastLeaveUserId = ""
+    var lastLeaveUserId = "-"
 
     private var webSocket: WebSocket? = null
 
@@ -114,8 +114,6 @@ class WebSocketManager @Inject constructor(
                 val type = jsonArray[0].asString // First element: message type
                 val data = jsonArray[1].asJsonObject // Second element: JSON object
 
-                Log.e("chat_adapter", data.toString())
-
                 handleIncomingMessage(webSocket, type, data)
 
             } catch (e: Exception) {
@@ -181,6 +179,7 @@ class WebSocketManager @Inject constructor(
             val chatId = data.get("chatId").asString
             Log.e("leave_chat", chatId)
             if(searchMatchFoundData.value.chatId == chatId) {
+                lastLeaveUserId = searchMatchFoundData.value.udid
                 _leaveChatFlow.value = true
                 clearMatchedUserData()
             } else {
@@ -203,7 +202,7 @@ class WebSocketManager @Inject constructor(
                 return
             }
 
-            lastLeaveUserId = data.get("udid").asString
+//            lastLeaveUserId = data.get("udid").asString
 
             println(data.toString())
 
