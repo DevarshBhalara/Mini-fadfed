@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.attachBaseContext(newBase)
         val defaultLanguage = LocaleHelper.getDeviceDefaultLanguage()
         val appLanguage = if (defaultLanguage == "ar") "ar" else "en"
-        LocaleHelper.setAppLocale(this, appLanguage)
+        LocaleHelper.setAppLocale(this, "ar")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
