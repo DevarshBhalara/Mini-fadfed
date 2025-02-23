@@ -55,6 +55,8 @@
 
 
         <LinearLayout
+            android:baselineAligned="false"
+            android:layoutDirection="ltr"
             android:id="@+id/llGenderSelection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,24 +73,23 @@
                 android:orientation="vertical"
                 tools:ignore="UseCompoundDrawables">
 
-
                 <ImageView
-                    android:id="@+id/ivFemale"
+                    android:id="@+id/ivMale"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginTop="8dp"
-                    android:src="@drawable/ic_female_default"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/ivMale"
+                    android:src="@drawable/ic_male_default"
+                    app:layout_constraintEnd_toStartOf="@id/ivFemale"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/arabicui_text_medium"
-                    android:text="@string/female"
+                    android:text="@string/male"
                     app:layout_constraintEnd_toEndOf="@id/ivMale"
                     app:layout_constraintStart_toStartOf="@id/ivMale"
                     app:layout_constraintTop_toBottomOf="@id/ivMale" />
@@ -136,23 +137,24 @@
                 android:orientation="vertical"
                 tools:ignore="UseCompoundDrawables">
 
+
                 <ImageView
-                    android:id="@+id/ivMale"
+                    android:id="@+id/ivFemale"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginTop="8dp"
-                    android:src="@drawable/ic_male_default"
-                    app:layout_constraintEnd_toStartOf="@id/ivFemale"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:src="@drawable/ic_female_default"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivMale"
                     app:layout_constraintTop_toTopOf="parent" />
+
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/arabicui_text_medium"
-                    android:text="@string/male"
+                    android:text="@string/female"
                     app:layout_constraintEnd_toEndOf="@id/ivMale"
                     app:layout_constraintStart_toStartOf="@id/ivMale"
                     app:layout_constraintTop_toBottomOf="@id/ivMale" />
@@ -162,6 +164,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layoutDirection="ltr"
             android:layout_width="match_parent"
             android:layout_height="96dp"
             android:orientation="horizontal"
@@ -174,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:src="@drawable/ic_chat" />
+                android:src="@drawable/ic_contact" />
 
             <ImageView
                 android:id="@+id/ivSearch"
@@ -189,7 +192,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:src="@drawable/ic_contact" />
+                android:src="@drawable/ic_chat" />
+
 
         </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.example.mini_fadfed.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -11,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.mini_fadfed.data.model.Gender
 import com.example.mini_fadfed.databinding.ActivityMainBinding
 import com.example.mini_fadfed.ui.viewmodel.RegisterUserViewModel
+import com.example.mini_fadfed.utils.LocaleHelper
 import com.example.mini_fadfed.utils.PreferenceHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -21,6 +23,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: RegisterUserViewModel by viewModels()
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase)
+        val defaultLanguage = LocaleHelper.getDeviceDefaultLanguage()
+        val appLanguage = if (defaultLanguage == "ar") "ar" else "en"
+        LocaleHelper.setAppLocale(this, appLanguage)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

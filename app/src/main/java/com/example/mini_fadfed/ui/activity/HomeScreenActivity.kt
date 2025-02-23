@@ -23,12 +23,12 @@ class HomeScreenActivity : AppCompatActivity() {
     private val viewModel: WebSocketViewModel by viewModels()
     private lateinit var binding: ActivityHomeScreenBinding
 
-    override fun attachBaseContext(newBase: Context?) {
-        super.attachBaseContext(newBase)
-        val defaultLanguage = LocaleHelper.getDeviceDefaultLanguage()
-        val appLanguage = if (defaultLanguage == "ar") "ar" else "en"
-        LocaleHelper.setAppLocale(this, appLanguage)
-    }
+//    override fun attachBaseContext(newBase: Context?) {
+//        super.attachBaseContext(newBase)
+//        val defaultLanguage = LocaleHelper.getDeviceDefaultLanguage()
+//        val appLanguage = if (defaultLanguage == "ar") "ar" else "en"
+//        LocaleHelper.setAppLocale(this, appLanguage)
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
