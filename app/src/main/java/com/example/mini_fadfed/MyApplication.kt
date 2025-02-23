@@ -16,7 +16,7 @@ class MyApplication: Application() {
         super.onCreate()
         val defaultLanguage = LocaleHelper.getDeviceDefaultLanguage()
         val appLanguage = if (defaultLanguage == "ar") "ar" else "en"
-        LocaleHelper.setAppLocale(this, appLanguage)
+        LocaleHelper.setAppLocale(this, "ar")
     }
 
     override fun onTerminate() {

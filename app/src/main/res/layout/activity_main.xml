@@ -17,17 +17,29 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layoutDirection="ltr"
         android:background="@color/bg_color"
         tools:context=".ui.activity.MainActivity">
 
-        <com.google.android.material.appbar.MaterialToolbar
+        <LinearLayout
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="72dp"
             android:background="@color/white"
-            app:titleTextColor="@color/title_txt"
-            app:title="@string/may_you_live_among_us"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:elevation="1dp"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/arabicui_text_medium"
+                android:textColor="@color/title_txt"
+                android:layout_marginHorizontal="14dp"
+                android:textSize="26sp"
+                android:text="@string/may_you_live_among_us"
+                />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/your_name_textview"
